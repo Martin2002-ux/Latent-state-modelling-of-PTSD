@@ -86,10 +86,8 @@ p_values_x=c()
 n=100
 noise=0.2
 
-#we ran all code with three seeds, though reported results are based on seed 42
+#baseline hyperparameters were chosen using simulations with seed of 42
 seed=42
-#seed=43
-#seed=44
 
 #these are the baseline hyperparameters with variation, which were used for the
 #simulation
@@ -103,6 +101,7 @@ lambda="rlnorm(1,meanlog = log(1), sdlog = 0.18)"
 eta="rtruncnorm(1, a = 0.7, b = Inf, mean = 1.2, sd = 1)"
 eta_ptsd="rtruncnorm(1, a = 0.7, b = Inf, mean = 5, sd = 1)"
 
+#Note: baseline hyperparameters were chosen using identical seeds for controls and PTSD, but evalutation of actual differences was done with different seed for PTSD
 
 ##########################
 ###Blechert et al. 2007###
