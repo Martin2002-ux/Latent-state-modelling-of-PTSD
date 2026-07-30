@@ -1,56 +1,100 @@
-library(ez)
+library(afex)
 library(dplyr)
 library(emmeans)
-library(afex)
+library(ez)
 library(tidyr)
 library(truncnorm)
 
 #when Mauchly's test is significant, we use the GG sphericity correction values
-#this function also checks if the significance (yes or no) matches what is expected
-check_p <- function(ez, effect, sig) {
+#this function also checks if the significance (yes or no) matches what is expected.
+#Errors automatically become treated as if it was non-significant output
+check_p_local <- function(ez, effect, sig) {
+  if (is.null(ez)) {
+    return(FALSE == sig)
+  }
+
   mauchly <- ez$`Mauchly's Test for Sphericity`
-  
+
   p <- if (!is.null(mauchly) && effect %in% mauchly$Effect &&
            mauchly %>% filter(Effect == effect) %>% pull(`p<.05`) == "*") {
     ez$`Sphericity Corrections` %>% filter(Effect == effect) %>% pull(`p[GG]`)
   } else {
     ez$ANOVA %>% filter(Effect == effect) %>% pull(p)
   }
-  
-  pass <<- c(pass, (p < 0.05) == sig)
+
+  return((p < 0.05) == sig)
+}
+
+check_p <- function(ez, effect, sig) {
+  if (is.null(ez)) {
+    pass <<- c(pass, FALSE == sig)
+    p=NA
+  } else{
+    mauchly <- ez$`Mauchly's Test for Sphericity`
+
+    p <- if (!is.null(mauchly) && effect %in% mauchly$Effect &&
+             mauchly %>% filter(Effect == effect) %>% pull(`p<.05`) == "*") {
+      ez$`Sphericity Corrections` %>% filter(Effect == effect) %>% pull(`p[GG]`)
+    } else {
+      ez$ANOVA %>% filter(Effect == effect) %>% pull(p)
+    }
+    if (is.na(p)) {
+      pass <<- c(pass, FALSE == sig)
+    } else{
+      pass <<- c(pass, (p < 0.05) == sig)
+    }
+  }
+
   p_values <<- c(p_values, p)
-  
+
   return(p)
 }
 
 #for non-ANOVA, this function will check if the significance of the test matches
 #the intended significance (true or false)
 check_p_other <- function(p, sig) {
-  pass <<- c(pass, (p < 0.05) == sig)
+  if (is.na(p)) {
+    pass <<- c(pass, FALSE==sig)
+  } else{
+    pass <<- c(pass, (p < 0.05) == sig)
+  }
   p_values <<- c(p_values, p)
   return(p)
 }
 
 #the check_p equivalent for non-physiological expectancy analyses
 check_p_x <- function(ez, effect, sig) {
-  mauchly <- ez$`Mauchly's Test for Sphericity`
-  
-  p <- if (!is.null(mauchly) && effect %in% mauchly$Effect &&
-           mauchly %>% filter(Effect == effect) %>% pull(`p<.05`) == "*") {
-    ez$`Sphericity Corrections` %>% filter(Effect == effect) %>% pull(`p[GG]`)
-  } else {
-    ez$ANOVA %>% filter(Effect == effect) %>% pull(p)
+  if (is.null(ez)) {
+    pass_x <<- c(pass_x, FALSE == sig)
+    p=NA
+  } else{
+    mauchly <- ez$`Mauchly's Test for Sphericity`
+
+    p <- if (!is.null(mauchly) && effect %in% mauchly$Effect &&
+             mauchly %>% filter(Effect == effect) %>% pull(`p<.05`) == "*") {
+      ez$`Sphericity Corrections` %>% filter(Effect == effect) %>% pull(`p[GG]`)
+    } else {
+      ez$ANOVA %>% filter(Effect == effect) %>% pull(p)
+    }
+    if (is.na(p)) {
+      pass_x <<- c(pass_x, FALSE == sig)
+    } else{
+      pass_x <<- c(pass_x, (p < 0.05) == sig)
+    }
+
   }
-  
-  pass_x <<- c(pass_x, (p < 0.05) == sig)
   p_values_x <<- c(p_values_x, p)
-  
+
   return(p)
 }
 
 #the check_p_other equivalent for non-physiological expectancy analyses
 check_p_other_x <- function(p, sig) {
-  pass_x <<- c(pass_x, (p < 0.05) == sig)
+  if (is.na(p)) {
+    pass_x <<- c(pass_x, FALSE==sig)
+  } else{
+    pass_x <<- c(pass_x, (p < 0.05) == sig)
+  }
   p_values_x <<- c(p_values_x, p)
   return(p)
 }
@@ -86,7 +130,6 @@ p_values_x=c()
 n=100
 noise=0.2
 
-#baseline hyperparameters were chosen using simulations with seed of 42
 seed=42
 
 #these are the baseline hyperparameters with variation, which were used for the
@@ -101,14 +144,13 @@ lambda="rlnorm(1,meanlog = log(1), sdlog = 0.18)"
 eta="rtruncnorm(1, a = 0.7, b = Inf, mean = 1.2, sd = 1)"
 eta_ptsd="rtruncnorm(1, a = 0.7, b = Inf, mean = 5, sd = 1)"
 
-#Note: baseline hyperparameters were chosen using identical seeds for controls and PTSD, but evalutation of actual differences was done with different seed for PTSD
 
 ##########################
 ###Blechert et al. 2007###
 ##########################
 
 phase_def <- list(
-    
+
   phase1 = list(
     trials = list(
       A = 6,
@@ -118,7 +160,7 @@ phase_def <- list(
       c(A = 1)
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       A = 6,
@@ -126,34 +168,34 @@ phase_def <- list(
     )
   )
 )
-  
+
 ctrl=run(seed=seed, phase_def=phase_def, V_noise_sd=noise, n=n, block=6, eta=eta, lambda=lambda, alpha0=alpha0, alpha1=alpha1, alpha2=alpha2, gamma = gamma, delta=delta, sigma0=sigma0)
 ptsd=run(seed=seed + 1e6, phase_def=phase_def, V_noise_sd=noise, n=n, block=6, eta=eta_ptsd, lambda=lambda, alpha0=alpha0, alpha1=alpha1, alpha2=alpha2, gamma = gamma, delta=delta, sigma0=sigma0, prev = n, group = "ptsd")
 
 plot_compare(ctrl=ctrl, ptsd=ptsd, plot=T, fixed_axis=T)
-  
-  
+
+
 df_long <- do.call(rbind, c(
   lapply(ctrl, function(r) subset(r$long[[2]])),
   lapply(ptsd, function(r) subset(r$long[[2]]))
 ))
-  
+
 df_avg <- df_long %>%
   group_by(subject, group, cue_type, block) %>%
   summarise(V = mean(V), .groups = "drop")
-  
+
 ext = ezANOVA(data = df_avg, dv = V, wid = subject,
               within = c(cue_type, block), between = group)
-  
+
 df_CSplus <- df_avg %>%
   filter(cue_type == "A")
-  
+
 CSplus = ezANOVA(data = df_CSplus, dv = V, wid = subject,
                  within = block, between = group)
-  
+
 df_CSmin <- df_avg %>%
   filter(cue_type == "B")
-  
+
 CSmin = ezANOVA(data = df_CSmin, dv = V, wid = subject,
                 within = block, between = group)
 
@@ -170,7 +212,7 @@ check_p(CSplus, "group", TRUE)
 check_p(CSmin, "group", FALSE)
 
 
-#now we're gonna do expectancy ratings. For For extinction, one rating was taken 
+#now we're gonna do expectancy ratings. For For extinction, one rating was taken
 #on the last extinction trial.
 df_long <- do.call(rbind, c(
   lapply(ctrl, function(r) subset(r$long[[2]], as.integer(presentation) == 6)),
@@ -202,7 +244,7 @@ check_p_other(CSmin$p.value, FALSE)
 ############################
 
 phase_def <- list(
-  
+
   phase1 = list(
     trials = list(
       A = 5,
@@ -212,7 +254,7 @@ phase_def <- list(
       c(A = 1)
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       A = 10,
@@ -261,7 +303,7 @@ check_p(late, "group:presentation", FALSE)
 ###########################
 
 phase_def <- list(
-  
+
   phase1 = list(
     trials = list(
       A = 12,
@@ -272,14 +314,14 @@ phase_def <- list(
       c(A = 0.75, B = 0.75)
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       A = 10,
       C = 10
     )
   ),
-  
+
   day2 = list(
     trials = list(
       A = 8,
@@ -287,13 +329,13 @@ phase_def <- list(
       C = 8
     )
   ),
-  
+
   #this phase is not part of the experiment, and is not analyzed, except to allow
   #us to see the V of each cue at the very end of the experiment. Because V
   #stores the value of each cue BEFORE the outcome is shown, this bonus trial
   #actually represents the V at the end of the final block of day2, which is
   #needed for analyzing threat expectancy ratings
-  
+
   bonus = list(
     trials = list(
       A = 1
@@ -406,7 +448,7 @@ rec_x <- ezANOVA(data = df_rec, dv = V, wid = subject,
 #whose outcome is irrelevant, so that we can record V directly after trial 56
 
 phase_def <- list(
-  
+
   phase1 = list(
     trials = list(
       A = 12,
@@ -417,14 +459,14 @@ phase_def <- list(
       c(A = 0.75, B = 0.75)
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       A = 10,
       C = 10
     )
   ),
-  
+
   #this bonus phase is just so we can index the V of the trial directly after
   #phase 2, which represents the V at the end of phase 2
   bonus = list(
@@ -437,7 +479,7 @@ phase_def <- list(
 ctrl=run(seed=seed, phase_def=phase_def, V_noise_sd=noise, n=n, block=c(12,10,1), eta=eta, lambda=lambda, alpha0=alpha0, alpha1=alpha1, alpha2=alpha2, gamma = gamma, delta=delta, sigma0=sigma0)
 ptsd=run(seed=seed + 1e6, phase_def=phase_def, V_noise_sd=noise, n=n, block=c(12,10,1), eta=eta_ptsd, lambda=lambda, alpha0=alpha0, alpha1=alpha1, alpha2=alpha2, gamma = gamma, delta=delta, sigma0=sigma0, prev = n, group = "ptsd")
 
-#threat expectancy analysis using the end of each block (i.e. the V of the 
+#threat expectancy analysis using the end of each block (i.e. the V of the
 #trial directly after each block) for the extinction phase
 df_ext <- do.call(rbind, c(
   lapply(seq_along(ctrl), function(i) {
@@ -476,7 +518,7 @@ check_p_x(rec_x, "group:cue_type", FALSE)
 ##########################
 
 phase_def <- list(
-  
+
   phase1 = list(
     trials = list(
       A = 12,
@@ -486,7 +528,7 @@ phase_def <- list(
       c(A = 1)
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       A = 24,
@@ -577,8 +619,11 @@ df_acq_avg <- df_long %>%
     .groups = "drop"
   )
 
-acq_x = ezANOVA(data = df_acq_avg, dv = expectancy, wid = subject,
-                within = c(cue_type), between = group)
+acq_x <- tryCatch(
+  ezANOVA(data = df_acq_avg, dv = expectancy, wid = subject,
+          within = c(cue_type), between = group),
+  error = function(e) NULL
+)
 
 #same thing for extinction
 df_long <- do.call(rbind, c(
@@ -600,12 +645,15 @@ df_long$group    <- factor(df_long$group)
 df_long$cue_type <- factor(df_long$cue_type)
 df_long$superblock <- factor(ceiling(as.integer(df_long$block) / 2))
 
-ext_x <- ezANOVA(
-  data = df_long,
-  dv = expectancy,
-  wid = subject,
-  within = .(cue_type, superblock),
-  between = .(group)
+ext_x <- tryCatch(
+  ezANOVA(
+    data = df_long,
+    dv = expectancy,
+    wid = subject,
+    within = .(cue_type, superblock),
+    between = .(group)
+  ),
+  error = function(e) NULL
 )
 
 pass_x=c(pass_x, "Norrholm 2011")
@@ -621,7 +669,7 @@ check_p_x(ext_x, "group", FALSE)
 
 #X represents context A, Y represents context B
 phase_def <- list(
-  
+
   phase1_block1 = list(
     trials = list(
       AX = 8,
@@ -631,7 +679,7 @@ phase_def <- list(
       c(AX = 0.6)
     )
   ),
-  
+
   phase1_block2 = list(
     trials = list(
       BX = 8,
@@ -641,21 +689,21 @@ phase_def <- list(
       c(BX = 0.6)
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       AY = 16,
       CY = 16
     )
   ),
-  
+
   day2_block1 = list(
     trials = list(
       AY = 16,
       CY = 16
     )
   ),
-  
+
   day2_block2 = list(
     trials = list(
       BY = 16,
@@ -723,7 +771,7 @@ check_p(rec, "group:cue_type", FALSE) #original study had p value of 0.06, trend
 ##########################
 
 phase_def <- list(
-  
+
   phase1 = list(
     trials = list(
       A = 8,
@@ -733,7 +781,7 @@ phase_def <- list(
       c(A = 0.75)
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       A = 16,
@@ -834,7 +882,7 @@ check_p_other(ext_block_1$p.value, FALSE)
 check_p_other(ext_block_2$p.value, FALSE)
 
 
-#for expectancy ratings, participants could only rate "expect", "don't expect", 
+#for expectancy ratings, participants could only rate "expect", "don't expect",
 #and "unsure". Therefore, we divide V into three categories of equal size
 df_long <- do.call(rbind, c(
   lapply(ctrl, function(r) subset(r$long[[1]], as.integer(presentation) > 6)),
@@ -858,8 +906,14 @@ df_avg_last_two_acq$subject  <- factor(df_avg_last_two_acq$subject)
 df_avg_last_two_acq$group    <- factor(df_avg_last_two_acq$group)
 df_avg_last_two_acq$cue_type <- factor(df_avg_last_two_acq$cue_type)
 
-acq_x = ezANOVA(data = df_avg_last_two_acq, dv = expectancy, wid = subject,
-              within = c(cue_type), between = group)
+#because there are only 3 categories which is very coarse, in some analyses
+#there will be no differentiation between groups and the ANOVA will fail,
+#we can be considered a non-significant difference
+acq_x <- tryCatch(
+  ezANOVA(data = df_avg_last_two_acq, dv = expectancy, wid = subject,
+          within = c(cue_type), between = group),
+  error = function(e) NULL
+)
 
 df_long <- do.call(rbind, c(
   lapply(ctrl, function(r) subset(r$long[[2]])),
@@ -883,8 +937,11 @@ df_ext$subject  <- factor(df_ext$subject)
 df_ext$group    <- factor(df_ext$group)
 df_ext$cue_type <- factor(df_ext$cue_type)
 
-ext_x = ezANOVA(data = df_ext, dv = expectancy, wid = subject,
-              within = c(presentation), between = group)
+ext_x <- tryCatch(
+  ezANOVA(data = df_ext, dv = expectancy, wid = subject,
+          within = c(presentation), between = group),
+  error = function(e) NULL
+)
 
 
 pass_x=c(pass_x, "Acheson 2015")
@@ -901,7 +958,7 @@ check_p_x(ext_x, "group:presentation", FALSE)
 #########################
 
 phase_def <- list(
-  
+
   phase1 = list(
     trials = list(
       A = 5,
@@ -911,14 +968,14 @@ phase_def <- list(
       c(A = 1)
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       A = 10,
       B = 10
     )
   ),
-  
+
   day2 = list(
     trials = list(
       A = 5,
@@ -1007,7 +1064,7 @@ if (retention_est > 0){
 ##########################
 
 phase_def <- list(
-  
+
   phase1 = list(
     trials = list(
       A = 12,
@@ -1017,7 +1074,7 @@ phase_def <- list(
       c(A = 1)
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       A = 24,
@@ -1061,7 +1118,7 @@ p_values=c(p_values, "Norrholm 2015")
 
 #significant
 check_p_other(early_p$p.value, TRUE)
-check_p_other(mid_p$p.value, TRUE) 
+check_p_other(mid_p$p.value, TRUE)
 
 #not significant
 check_p_other(late_p$p.value, FALSE)
@@ -1071,7 +1128,7 @@ check_p_other(late_p$p.value, FALSE)
 #######################
 
 phase_def <- list(
-  
+
   phase1 = list(
     trials = list(
       A = 60
@@ -1080,7 +1137,7 @@ phase_def <- list(
       c(A = 0.5)
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       A = 20
@@ -1096,7 +1153,7 @@ plot_compare(ctrl=ctrl,ptsd=ptsd, plot=T)
 #mean of last 20 acquisition trials
 acq_ctrl <- sapply(ctrl, function(x) mean(x$V_cue$A[51:60], na.rm = TRUE))
 acq_ptsd <- sapply(ptsd, function(x) mean(x$V_cue$A[51:60], na.rm = TRUE))
-                                     
+
 #mean of extinction
 ext_ctrl <- sapply(ctrl, function(x) mean(x$V_cue$A[61:80], na.rm = TRUE))
 ext_ptsd <- sapply(ptsd, function(x) mean(x$V_cue$A[61:80], na.rm = TRUE))
@@ -1119,14 +1176,14 @@ pass=c(pass, "Handy 2018")
 p_values=c(p_values, "Handy 2018")
 
 #significant
-check_p_other(ext_p, TRUE) 
+check_p_other(ext_p, TRUE)
 
 #########################
 ###Burriss et al. 2006###
 #########################
 
 phase_def <- list(
-  
+
   phase1 = list(
     trials = list(
       A = 60,
@@ -1136,7 +1193,7 @@ phase_def <- list(
       c(A = 1) #THE LAST CUE A OF EACH BLOCK SHOULD BE UNREWARDED
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       A = 20,
@@ -1154,7 +1211,7 @@ n_participants <- n
 build_phase1_world <- function(n_blocks = 12, block_size = 10, ncop = 10) {
   p1_trials  <- character(0)
   p1_rewards <- numeric(0)
-  
+
   for (i in seq_len(n_blocks)) {
     trials  <- sample(c(rep("A", 5), rep("B", 5)))
     rewards <- ifelse(trials == "A", 1, 0)
@@ -1162,13 +1219,13 @@ build_phase1_world <- function(n_blocks = 12, block_size = 10, ncop = 10) {
     p1_trials  <- c(p1_trials,  trials)
     p1_rewards <- c(p1_rewards, rewards)
   }
-  
+
   p2_trials  <- sample(c(rep("A", 20), rep("B", 20)))
   p2_rewards <- rep(0, 40)
-  
+
   all_trials  <- c(p1_trials, p2_trials)
   all_rewards <- c(p1_rewards, p2_rewards)
-  
+
   w <- make_world(trial_patterns = all_trials, reward = all_rewards, L = ncop)
   w$type_seq <- list(p1_trials, p2_trials)
   w
@@ -1249,7 +1306,7 @@ check_p(ext, "cue_type:block", FALSE)
 #############################
 
 phase_def <- list(
-  
+
   phase1 = list(
     trials = list(
       A = 10,
@@ -1259,7 +1316,7 @@ phase_def <- list(
       c(A = 0.8)
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       A = 6,
@@ -1340,7 +1397,7 @@ check_p_other(ptsd_ext, FALSE)
 
 #X represents context A, Y represents context B
 phase_def <- list(
-  
+
   phase1_block1 = list(
     trials = list(
       AX = 8,
@@ -1350,7 +1407,7 @@ phase_def <- list(
       c(AX = 0.6)
     )
   ),
-  
+
   phase1_block2 = list(
     trials = list(
       BX = 8,
@@ -1360,21 +1417,21 @@ phase_def <- list(
       c(BX = 0.6)
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       AY = 16,
       CY = 16
     )
   ),
-  
+
   day2_block1 = list(
     trials = list(
       AY = 16,
       CY = 16
     )
   ),
-  
+
   day2_block2 = list(
     trials = list(
       BY = 16,
@@ -1438,7 +1495,7 @@ check_p(ext, "group:cue_type", FALSE)
 #####################
 
 phase_def <- list(
-  
+
   phase1 = list(
     trials = list(
       A = 5,
@@ -1448,7 +1505,7 @@ phase_def <- list(
       c(A = 1)
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       A = 10,
@@ -1561,7 +1618,7 @@ check_p_x(late, "group:cue_type", FALSE)
 ###########################
 
 phase_def <- list(
-  
+
   phase1 = list(
     trials = list(
       AX = 8,
@@ -1572,14 +1629,14 @@ phase_def <- list(
       c(AX = 5/8, BX = 5/8)
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       AY = 16,
       CY = 16
     )
   ),
-  
+
   day2_recall = list(
     trials = list(
       AY = 8,
@@ -1587,7 +1644,7 @@ phase_def <- list(
       CY = 16
     )
   ),
-  
+
   day2_renewal = list(
     trials = list(
       AX = 8,
@@ -1768,7 +1825,7 @@ check_p_other(t_ptsd_ren$p.value, FALSE)
 ###########################
 
 phase_def <- list(
-  
+
   phase1 = list(
     trials = list(
       A = 12,
@@ -1778,7 +1835,7 @@ phase_def <- list(
       c(A = 1)
     )
   ),
-  
+
   phase2 = list(
     trials = list(
       A = 24,
@@ -1840,7 +1897,7 @@ check_p(ext_ptsd, "block", FALSE)
 
 #X is context 1, Y is context 2, Z is context 3
 phase_def <- list(
-  
+
   phase1 = list(
     trials = list(
       AX = 30,
@@ -1850,14 +1907,14 @@ phase_def <- list(
       c(AX = 1)
     )
   ),
-  
+
   phase2_day2 = list(
     trials = list(
       AY = 30,
       BY = 30
     )
   ),
-  
+
   renewal_day9 = list(
     trials = list(
       AZ = 30,
@@ -1899,7 +1956,7 @@ df_long <- do.call(rbind, c(
 
 ren = ezANOVA(data = df_long, dv = V, wid = subject,
               within = c(cue_type), between = group)
-  
+
 #the t tests use D-score, which is mean CS+ minus mean CS- for the renewal phase
 df_dscore <- df_long %>%
   group_by(subject, group, cue_type) %>%
@@ -1953,7 +2010,7 @@ df_long <- do.call(rbind, c(
   })
 ))
 
-#for expectancy ratings, participants could only rate on a 9 point Likert scale. 
+#for expectancy ratings, participants could only rate on a 9 point Likert scale.
 #Therefore, we divide V into nine categories of equal size
 #the bounds are extra wide in case there's overshoot
 df_long$expectancy <- cut(
@@ -1969,8 +2026,10 @@ df_long$subject  <- factor(df_long$subject)
 df_long$group    <- factor(df_long$group)
 df_long$cue_type <- factor(df_long$cue_type)
 
-acq_x = ezANOVA(data = df_long, dv = expectancy, wid = subject,
-                within = c(cue_type), between = group)
+acq_x = tryCatch(ezANOVA(data = df_long, dv = expectancy, wid = subject,
+                         within = c(cue_type), between = group),
+                 error = function(e) NULL
+)
 
 
 #now we do the same for renewal
@@ -1987,9 +2046,9 @@ df_long <- do.call(rbind, c(
   lapply(seq_along(ptsd), function(i) {
     r <- ptsd[[i]]
     rbind(
-      data.frame(subject = factor(i + n), group = "ptsd", cue_type = "AZ",
+      data.frame(subject = factor(i + n_ctrl), group = "ptsd", cue_type = "AZ",
                  V = r$V[["A"]][151, 1] + r$V[["Z"]][151, 1]),
-      data.frame(subject = factor(i + n), group = "ptsd", cue_type = "BZ",
+      data.frame(subject = factor(i + n_ctrl), group = "ptsd", cue_type = "BZ",
                  V = r$V[["B"]][151, 1] + r$V[["Z"]][151, 1])
     )
   })
@@ -2009,8 +2068,17 @@ df_long$subject  <- factor(df_long$subject)
 df_long$group    <- factor(df_long$group)
 df_long$cue_type <- factor(df_long$cue_type)
 
-ren_x = ezANOVA(data = df_long, dv = expectancy, wid = subject,
-                within = c(cue_type), between = group)
+ren_x = tryCatch(
+  ezANOVA(
+    data = df_long,
+    dv = expectancy,
+    wid = subject,
+    within = c(cue_type),
+    between = group
+  ),
+  error = function(e)
+    NULL
+)
 
 #the t tests use D-score, which is CS+ minus mean CS- for the renewal phase
 df_dscore <- df_long %>%
@@ -2020,10 +2088,17 @@ df_dscore <- df_long %>%
   mutate(Dscore = AZ - BZ)
 
 #within-group one-sample t-tests on D-score vs 0
-ren_ttest_ctrl_x <- t.test(df_dscore$Dscore[df_dscore$group == "ctrl"],
-                         mu = 0, alternative = "greater")
-ren_ttest_ptsd_x <- t.test(df_dscore$Dscore[df_dscore$group == "ptsd"],
-                         mu = 0, alternative = "greater")
+ren_ttest_ctrl_x <- tryCatch(
+  t.test(df_dscore$Dscore[df_dscore$group == "ctrl"],
+         mu = 0, alternative = "greater"),
+  error = function(e) list(p.value = NA)
+)
+
+ren_ttest_ptsd_x <- tryCatch(
+  t.test(df_dscore$Dscore[df_dscore$group == "ptsd"],
+         mu = 0, alternative = "greater"),
+  error = function(e) list(p.value = NA)
+)
 
 #Wicking also looked at threat expectancy, which involved rating each cue
 #after each block. Since V records the associative value on a given trial
@@ -2035,7 +2110,7 @@ ren_ttest_ptsd_x <- t.test(df_dscore$Dscore[df_dscore$group == "ptsd"],
 #whose outcome is irrelevant, so that we can record V directly after trial 56
 
 phase_def <- list(
-  
+
   phase1 = list(
     trials = list(
       AX = 30,
@@ -2045,14 +2120,14 @@ phase_def <- list(
       c(AX = 1)
     )
   ),
-  
+
   phase2_day2 = list(
     trials = list(
       AY = 30,
       BY = 30
     )
   ),
-  
+
   #this bonus phase is just so we can index the V of the trial directly after
   #phase 2, which represents the V at the end of phase 2
   bonus = list(
@@ -2062,8 +2137,8 @@ phase_def <- list(
   )
 )
 
-ctrl=run(seed=seed, phase_def=phase_def, V_noise_sd=noise, n=n, pseudo=3, features=c("A","B","X","Y"), ezITI=list(c(120,100000)), eta=eta, lambda=lambda, alpha0=alpha0, alpha1=alpha1, alpha2=alpha2, gamma = gamma, delta=delta, sigma0=sigma0)
-ptsd=run(seed=seed + 1e6, phase_def=phase_def, V_noise_sd=noise, n=n, pseudo=3, features=c("A","B","X","Y"), ezITI=list(c(120,100000)), eta=eta_ptsd, lambda=lambda, alpha0=alpha0, alpha1=alpha1, alpha2=alpha2, gamma = gamma, delta=delta, sigma0=sigma0, prev = n, group = "ptsd")
+ctrl=run(seed=seed, phase_def=phase_def, V_noise_sd=noise, n=n_ctrl, pseudo=3, features=c("A","B","X","Y"), ezITI=list(c(120,100000)), eta=eta, lambda=lambda, alpha0=alpha0, alpha1=alpha1, alpha2=alpha2, gamma = gamma, delta=delta, sigma0=sigma0)
+ptsd=run(seed=seed + 1e6, phase_def=phase_def, V_noise_sd=noise, n=n_ptsd, pseudo=3, features=c("A","B","X","Y"), ezITI=list(c(120,100000)), eta=eta_ptsd, lambda=lambda, alpha0=alpha0, alpha1=alpha1, alpha2=alpha2, gamma = gamma, delta=delta, sigma0=sigma0, prev = n_ctrl, group = "ptsd")
 
 df_long <- do.call(rbind, c(
   lapply(seq_along(ctrl), function(i) {
@@ -2078,9 +2153,9 @@ df_long <- do.call(rbind, c(
   lapply(seq_along(ptsd), function(i) {
     r <- ptsd[[i]]
     rbind(
-      data.frame(subject = factor(i + n), group = "ptsd", cue_type = "AY",
+      data.frame(subject = factor(i + n_ctrl), group = "ptsd", cue_type = "AY",
                  V = r$V[["A"]][121, 1] + r$V[["Y"]][121, 1]),
-      data.frame(subject = factor(i + n), group = "ptsd", cue_type = "BY",
+      data.frame(subject = factor(i + n_ctrl), group = "ptsd", cue_type = "BY",
                  V = r$V[["B"]][121, 1] + r$V[["Y"]][121, 1])
     )
   })
@@ -2100,9 +2175,10 @@ df_long$subject  <- factor(df_long$subject)
 df_long$group    <- factor(df_long$group)
 df_long$cue_type <- factor(df_long$cue_type)
 
-ext_x = ezANOVA(data = df_long, dv = expectancy, wid = subject,
-                within = c(cue_type), between = group)
-
+ext_x = tryCatch(ezANOVA(data = df_long, dv = expectancy, wid = subject,
+                         within = c(cue_type), between = group),
+                 error = function(e) NULL
+)
 
 
 pass_x=c(pass_x, "Wicking 2016")
