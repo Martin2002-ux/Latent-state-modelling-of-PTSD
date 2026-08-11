@@ -1,5 +1,4 @@
 # Latent-state-modelling-of-PTSD
-Code works as is. Documentation coming soon.
-
-https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007331#sec002
-This is the original article that proposed this latent state model, by Dr. Amy Cochran and Dr. Josh Cisler (2019). Model architecture has been updated compared to the original. Absent cues are now initiated at their mean value across all other latent states, rather than at 0. An additional hyperparameter lambda has been added. The model now uses entropy to calculate the informativeness of each trial. The likelihood is exponentiated by lambda x normalized entropy, allowing informative trials to more quickly change belief in latent state, proportional to lambda.
+“Recreating Cochran-Cisler simulations” contains the code to recreate all analyses performed in Cochran and Cisler (2019) using the updated latent state model and the new baseline hyperparameters. It shows that the updated model and hyperparameters can recreate all the phenomena tested in Cochran and Cisler (2019) except for the “memory modification” effect.
+“Main analysis” contains the code we used to simulate all experiments and generate the results we put into the various tables. This code runs each simulated experiment 1000 times.
+“Simplified analysis” contains the same core code as the “main analysis” but is configured to run a single experiment rather than 1,000 simulations. This made it useful for exploratory hyperparameter tuning, as results could be quickly inspected using plotting functions. All reported results are based on the main analysis script. The simplified version is retained for posterity and for convenient exploration of how hyperparameter choices affect the results.
