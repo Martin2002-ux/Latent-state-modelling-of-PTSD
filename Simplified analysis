@@ -1,3 +1,4 @@
+library(latentState)
 library(afex)
 library(dplyr)
 library(emmeans)
