@@ -1,4 +1,5 @@
 library(dplyr)
+library(latentState)
 alpha0 = "0.2"
 alpha1 = "0.05"
 alpha2 = "0.05"
