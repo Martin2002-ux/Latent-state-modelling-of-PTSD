@@ -111,6 +111,10 @@ sigma0 = "0.5"
 tau = "10"
 lambda = "0"
 
+##############
+###Settings###
+##############
+
 #these are the baseline hyperparameters
 alpha0 = "0.2"
 alpha1 = "0.05"
@@ -128,10 +132,12 @@ pass=c()
 p_values=c()
 pass_x=c()
 p_values_x=c()
-n=100
+n=1
 noise=0.2
 
 seed=42
+
+###Stop here if you want to recreate plots from the paper
 
 #these are the baseline hyperparameters with variation, which were used for the
 #simulation
