@@ -268,7 +268,7 @@ phase_def <- list(
 ctrl=run(seed=seed, phase_def, V_noise_sd=noise, n=n, pseudo=2, eta=eta, lambda=lambda, alpha0=alpha0, alpha1=alpha1, alpha2=alpha2, gamma = gamma, delta=delta, sigma0=sigma0)
 ptsd=run(seed=seed + 1e6, phase_def, V_noise_sd=noise, n=n, pseudo=2, eta=eta_ptsd, lambda=lambda, alpha0=alpha0, alpha1=alpha1, alpha2=alpha2, gamma = gamma, delta=delta, sigma0=sigma0, group="ptsd", prev=n)
 
-plot_compare(ctrl=ctrl, ptsd=ptsd, plot=T, fixed_axis = T, plot_cue=T)
+plot_compare(ctrl=ctrl, ptsd=ptsd, plot=T, fixed_axis = T)
 
 df_long <- do.call(rbind, c(
   lapply(ctrl, function(r) subset(r$long[[2]], as.integer(presentation) <= 5)),
@@ -347,7 +347,7 @@ phase_def <- list(
 ctrl=run(seed=seed, phase_def=phase_def, V_noise_sd=noise, n=n, block=c(12,10,12,1), ezITI=list(c(56,100000)), eta=eta, lambda=lambda, alpha0=alpha0, alpha1=alpha1, alpha2=alpha2, gamma = gamma, delta=delta, sigma0=sigma0)
 ptsd=run(seed=seed + 1e6, phase_def=phase_def, V_noise_sd=noise, n=n, block=c(12,10,12,1), ezITI=list(c(56,100000)), eta=eta_ptsd, lambda=lambda, alpha0=alpha0, alpha1=alpha1, alpha2=alpha2, gamma = gamma, delta=delta, sigma0=sigma0, prev = n, group = "ptsd")
 
-plot_compare(ctrl=ctrl, ptsd=ptsd, plot=T, fixed_axis = T, plot_cue=T)
+plot_compare(ctrl=ctrl, ptsd=ptsd, plot=T, fixed_axis = T)
 
 df_long <- do.call(rbind, c(
   lapply(ctrl, function(r) subset(r$long[[1]])),
@@ -716,7 +716,7 @@ phase_def <- list(
 ctrl=run(seed=seed, phase_def=phase_def, features=c("A", "B", "C", "X", "Y"), ezITI=list(c(64,100000)), V_noise_sd=noise, n=n, eta=eta, lambda=lambda, alpha0=alpha0, alpha1=alpha1, alpha2=alpha2, gamma = gamma, delta=delta, sigma0=sigma0, pseudo=3)
 ptsd=run(seed=seed + 1e6, phase_def=phase_def, features=c("A", "B", "C", "X", "Y"), ezITI=list(c(64,100000)), V_noise_sd=noise, n=n, eta=eta_ptsd, lambda=lambda, alpha0=alpha0, alpha1=alpha1, alpha2=alpha2, gamma = gamma, delta=delta, sigma0=sigma0, pseudo=3, prev = n, group = "ptsd")
 
-plot_compare(ctrl=ctrl, ptsd=ptsd, plot=T, plot_cue=T, fixed_axis = T)
+plot_compare(ctrl=ctrl, ptsd=ptsd, plot=T, fixed_axis = T)
 
 df_long <- do.call(rbind, c(
   lapply(ctrl, function(r) subset(r$long[[3]], as.integer(presentation) > 4)),
@@ -1088,7 +1088,6 @@ ctrl=run(seed=seed, phase_def=phase_def, V_noise_sd=noise, n=n, block = 8, eta=e
 ptsd=run(seed=seed + 1e6, phase_def=phase_def, V_noise_sd=noise, n=n, block = 8, eta=eta_ptsd, lambda=lambda, alpha0=alpha0, alpha1=alpha1, alpha2=alpha2, gamma = gamma, delta=delta, sigma0=sigma0, prev = n, group = "ptsd")
 
 plot_compare(ctrl=ctrl, ptsd=ptsd, plot=T, fixed_axis = T)
-
 
 #mean V of cue A during early extinction
 early_ctrl <- sapply(ctrl, function(x) mean(x$V_cue$A[13:20], na.rm = TRUE))
