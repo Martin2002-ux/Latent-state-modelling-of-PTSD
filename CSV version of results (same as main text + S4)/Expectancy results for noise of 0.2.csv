@@ -1,0 +1,26 @@
+Study,Sample size of controls,Sample size of PTSD,Analysis,Finding in original study,Marginal probability,Qualitative assessment of the model’s ability to recreate each finding,Overall assessment of the model’s success
+acheson2015_x,923,42,Acquisition ANOVA Group Main Effect,NS,0.958,Successful Recreation,successful recreation
+acheson2015_x,923,42,Acquisition ANOVA Group x Cue Type Interaction,NS,0.952,Successful Recreation,successful recreation
+acheson2015_x,923,42,Extinction ANOVA Group Main Effect,NS,0.881,Successful Recreation,successful recreation
+acheson2015_x,923,42,Extinction ANOVA Group x Trial Number Interaction,NS,0.932,Successful Recreation,successful recreation
+blechert2007_x,34,36,Extinction ANOVA Group Main Effect,S,0.134,Failure to Recreate,failure to recreate
+blechert2007_x,34,36,Extinction ANOVA Cue Type Main Effect,S,0.914,Successful Recreation,failure to recreate
+blechert2007_x,34,36,CS Plus Group Difference,S,0.239,Partial Failure,failure to recreate
+blechert2007_x,34,36,Extinction ANOVA Group x Cue Type Interaction,NS,0.8,Successful Recreation,failure to recreate
+blechert2007_x,34,36,CS Minus Group Difference,NS,0.954,Successful Recreation,failure to recreate
+norrholm2011_x,78,49,Acqustion ANOVA Group Main Effect,NS,0.949,Successful Recreation,failure to recreate
+norrholm2011_x,78,49,Acqustion ANOVA Group x Cue Type Interaction,NS,0.958,Successful Recreation,failure to recreate
+norrholm2011_x,78,49,Extinction ANOVA Group Main Effect,NS,0.007,Failure to Recreate,failure to recreate
+norrholm2011_x,78,49,Extinction ANOVA Group x Cue Type Interaction,NS,0.001,Failure to Recreate,failure to recreate
+pohlechen2020_x,35,21,Acquisition ANOVA Group Main Effect,NS,0.943,Successful Recreation,successful recreation
+pohlechen2020_x,35,21,Extinction ANOVA Group Main Effect,NS,0.954,Successful Recreation,successful recreation
+pohlechen2020_x,35,21,Acquisition ANOVA Group x Cue Type Interaction,NS,0.943,Successful Recreation,successful recreation
+pohlechen2020_x,35,21,Extinction ANOVA Group x Cue Type Interaction,NS,0.947,Successful Recreation,successful recreation
+wicking2016_x,18,36,Acquistion ANOVA Group x Cue Type Interaction,NS,0.958,Successful Recreation,successful recreation
+wicking2016_x,18,36,Extinction ANOVA Group x Cue Type Interaction,NS,0.954,Successful Recreation,successful recreation
+zuj2017_x,33,21,Early Extinction Cue Type x Trial Number Interaction,S,1,Successful Recreation,chance-level recreation
+zuj2017_x,33,21,Late Extinction Group Main Effect,S,0.051,Failure to Recreate,chance-level recreation
+zuj2017_x,33,21,Late Extinction Cue Type Main Effect,S,0.97,Successful Recreation,chance-level recreation
+zuj2017_x,33,21,Late Extinction Trial Number Main Effect,S,0.658,Partial Success,chance-level recreation
+zuj2017_x,33,21,Early Extinction Group x Cue Type Interaction,NS,0.87,Successful Recreation,chance-level recreation
+zuj2017_x,33,21,Late Extinction Group x Cue Type Interaction,NS,0.922,Successful Recreation,chance-level recreation

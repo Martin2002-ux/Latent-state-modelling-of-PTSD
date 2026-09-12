@@ -1,0 +1,74 @@
+Study,Sample size of controls,Sample size of PTSD,Analysis,Finding in original study,Marginal probability,Qualitative assessment of the model’s ability to recreate each finding,Overall assessment of the model’s success
+blechert2007,34,36,Extinction ANOVA Group Main Effect,S,0.359,Partial Failure,chance-level recreation
+blechert2007,34,36,Extinction ANOVA Cue Type Main Effect,S,1,Successful Recreation,chance-level recreation
+blechert2007,34,36,Extinction ANOVA Group x Cue Type Interaction,S,0.499,Chance Level Recreation,chance-level recreation
+blechert2007,34,36,CS Plus Group Difference,S,0.585,Chance Level Recreation,chance-level recreation
+blechert2007,34,36,CS Minus Group Difference,NS,0.941,Successful Recreation,chance-level recreation
+felmingham2018,84,22,Early Extinction ANOVA Cue Type Main Effect,S,1,Successful Recreation,failure to recreate
+felmingham2018,84,22,Early Extinction ANOVA Trial Number Main Effect,S,1,Successful Recreation,failure to recreate
+felmingham2018,84,22,Early Extinction ANOVA Group x Trial Interaction,S,0.065,Failure to Recreate,failure to recreate
+felmingham2018,84,22,Late Extinction ANOVA Trial Number Main Effect,S,0.588,Chance Level Recreation,failure to recreate
+felmingham2018,84,22,Late Extinction ANOVA Group x Trial Interaction,NS,0.936,Successful Recreation,failure to recreate
+felmingham2018,84,22,Late Extinction ANOVA Stimulu Main Effects,NS,0.045,Failure to Recreate,failure to recreate
+pohlechen2020,35,21,Acquisition ANOVA Group Main Effect,NS,0.949,Successful Recreation,successful recreation
+pohlechen2020,35,21,Acquisition ANOVA Group x Cue Type Interaction,NS,0.939,Successful Recreation,successful recreation
+pohlechen2020,35,21,Extinction ANOVA Group Main Effect,NS,0.936,Successful Recreation,successful recreation
+pohlechen2020,35,21,Extinction ANOVA Group x Cue Type Interaction,NS,0.925,Successful Recreation,successful recreation
+norrholm2011,78,49,Extinction ANOVA Group Main Effect,S,0.877,Successful Recreation,partial failure
+norrholm2011,78,49,Extinction Block 1 t Test,S,1,Successful Recreation,partial failure
+norrholm2011,78,49,Extinction Block 2 t Test,S,0.089,Failure to Recreate,partial failure
+norrholm2011,78,49,Acquisition ANOVA Group Main Effect,NS,0.952,Successful Recreation,partial failure
+norrholm2011,78,49,CS Minus Group Difference,NS,0.951,Successful Recreation,partial failure
+norrholm2011,78,49,Extinction Block 3 t Test,NS,0.946,Successful Recreation,partial failure
+shvil2014,25,31,Extinction ANOVA Group Main Effect,NS,0.925,Successful Recreation,successful recreation
+shvil2014,25,31,Extinction ANOVA Cue Type Main Effect,NS,0.935,Successful Recreation,successful recreation
+shvil2014,25,31,Extinction ANOVA Group x Cue Type Interaction,NS,0.96,Successful Recreation,successful recreation
+acheson2015,923,42,Acquisition ANOVA Group x Cue Type Interaction,S,0.054,Failure to Recreate,failure to recreate
+acheson2015,923,42,Extinction ANOVA Group Main Effect,S,0.052,Failure to Recreate,failure to recreate
+acheson2015,923,42,Control Group t Test Between Cue Type Types During Acquisition,S,1,Successful Recreation,failure to recreate
+acheson2015,923,42,Extinction Block 3 t Test,S,0.058,Failure to Recreate,failure to recreate
+acheson2015,923,42,Extinction Block 4 t Test,S,0.055,Failure to Recreate,failure to recreate
+acheson2015,923,42,Ptsd Group t Test Between Cue Type Types During Acquisition,NS,0,Failure to Recreate,failure to recreate
+acheson2015,923,42,Extinction Block 1 t Test,NS,0.951,Successful Recreation,failure to recreate
+acheson2015,923,42,Extinction Block 2 t Test,NS,0.938,Successful Recreation,failure to recreate
+burriss2006,51,29,Extinction ANOVA Block Main Effect,S,0.622,Partial Success,chance-level recreation
+burriss2006,51,29,Acquistion ANOVA Group x Block Interaction,NS,0.945,Successful Recreation,chance-level recreation
+burriss2006,51,29,Extinction ANOVA Group x Block Interaction,NS,0.437,Chance Level Recreation,chance-level recreation
+burriss2006,51,29,Extinction ANOVA Cue Type x Block Interaction,NS,0.377,Partial Failure,chance-level recreation
+garfinkel2014,14,14,Extinction ANOVA Group Main Effect,NS,0.918,Successful Recreation,successful recreation
+garfinkel2014,14,14,Control t Test Between Stimuli in Extinction,NS,0.954,Successful Recreation,successful recreation
+garfinkel2014,14,14,PTSD t Test Between Stimuli in Extinction,NS,0.95,Successful Recreation,successful recreation
+grillon1999,12,12,Control Group Effect of Cue Type in Acquisition,S,1,Successful Recreation,failure to recreate
+grillon1999,12,12,Control Group Effect of Cue Type in Extinction,S,0.999,Successful Recreation,failure to recreate
+grillon1999,12,12,Extinction ANOVA Group x Cue Type Interaction,S,0.146,Failure to Recreate,failure to recreate
+grillon1999,12,12,Acquisition ANOVA Group x Cue Type Interaction,NS,0.951,Successful Recreation,failure to recreate
+grillon1999,12,12,PTSD Group Effect of Cue Type in Acquisition,NS,0,Failure to Recreate,failure to recreate
+grillon1999,12,12,PTSD Group Effect of Cue Type in Extinction,NS,0,Failure to Recreate,failure to recreate
+handy2018,51,15,Extinction Group Effect on Regression,S,0.043,Failure to Recreate,failure to recreate
+jovanovic2013,12,12,Control Acquistion Cue Type Main Effect,S,0.546,Chance Level Recreation,failure to recreate
+jovanovic2013,12,12,Control Extinction Cue Type Main Effect,S,1,Successful Recreation,failure to recreate
+jovanovic2013,12,12,PTSD Acquistion Cue Type Main Effect,NS,0.045,Failure to Recreate,failure to recreate
+jovanovic2013,12,12,PTSD Extinction Cue Type Main Effect,NS,0,Failure to Recreate,failure to recreate
+milad2009,19,20,Extinction ANOVA Group Main Effect,NS,0.936,Successful Recreation,partial success
+milad2009,19,20,Extinction ANOVA Cue Type Main Effect,NS,0.933,Successful Recreation,partial success
+milad2009,19,20,Extinction ANOVA Group x Cue Type Interaction,NS,0.959,Successful Recreation,partial success
+norrholm2015,230,39,Early Extinction t Test Between Groups,S,0.999,Successful Recreation,partial failure
+norrholm2015,230,39,Middle Extinction t Test Between Groups,S,0.076,Failure to Recreate,partial failure
+norrholm2015,230,39,Late Extinction t Test Between Groups,NS,0.943,Successful Recreation,partial failure
+pineles2016,16,16,Group Effect on Regression for Initial Fear Change,NS,0.934,Successful Recreation,successful recreation
+pineles2016,16,16,Group Effect on Regression for Late Fear Change,NS,0.951,Successful Recreation,successful recreation
+wicking2016,18,36,Acquisition ANOVA Group x Cue Type Interaction,NS,0.959,Successful Recreation,successful recreation
+wicking2016,18,36,Extinction ANOVA Group x Cue Type Interaction,NS,0.938,Successful Recreation,successful recreation
+zuj2017,33,21,Early Extinction ANOVA Cue Type Main Effect,S,1,Successful Recreation,failure to recreate
+zuj2017,33,21,Early Extinction ANOVA Trial Number Main Effect,S,1,Successful Recreation,failure to recreate
+zuj2017,33,21,Early Extinction ANOVA Group x Cue Type Interaction,S,0.091,Failure to Recreate,failure to recreate
+zuj2017,33,21,Late Extinction ANOVA Trial Number Main Effect,S,0.285,Partial Failure,failure to recreate
+zuj2017,33,21,Control Difference Between Trials 1 and 2 of Extinction,S,0.901,Successful Recreation,failure to recreate
+zuj2017,33,21,PTSD Difference Between Trials 2 and 3 of Extinction,S,0.424,Chance Level Recreation,failure to recreate
+zuj2017,33,21,Acquisition ANOVA Group Main Effect,NS,0.945,Successful Recreation,failure to recreate
+zuj2017,33,21,Group Extinction Group Main Effect,NS,0.92,Successful Recreation,failure to recreate
+zuj2017,33,21,Late Extinction Group Main Effect,NS,0.95,Successful Recreation,failure to recreate
+zuj2017,33,21,Late Extinction Cue Type Main Effect,NS,0.276,Partial Failure,failure to recreate
+zuj2017,33,21,Late Extinction Group x Cue Type Interaction,NS,0.935,Successful Recreation,failure to recreate
+zuj2017,33,21,PTSD Difference Between Trials 1 and 2 of Extinction,NS,0.377,Partial Failure,failure to recreate
+zuj2017,33,21,Control Difference Between Trials 2 and 3 of Extinction,NS,0.256,Partial Failure,failure to recreate
