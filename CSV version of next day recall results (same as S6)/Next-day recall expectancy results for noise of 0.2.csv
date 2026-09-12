@@ -1,0 +1,6 @@
+Study,Sample size of controls,Sample size of PTSD,Analysis,Finding in original study,Marginal probability,Qualitative assessment of the model’s ability to recreate each finding,Overall assessment of the model’s success
+pohlechen2020_x,35,21,Recall ANOVA Group Main Effect,NS,0.845,Successful Recreation,successful recreation
+pohlechen2020_x,35,21,Recall ANOVA Group x Cue Type Interaction,NS,0.847,Successful Recreation,successful recreation
+wicking2016_x,18,36,Recall ANOVA Group x Cue Type Interaction,NS,0.945,Successful Recreation,successful recreation
+wicking2016_x,18,36,PTSD t Test Between Stimuli in Recall,S,0.066,Failure to Recreate,successful recreation
+wicking2016_x,18,36,Control t Test Between Stimuli in Recall,S,0.93,Successful Recreation,successful recreation

@@ -1,0 +1,18 @@
+Study,Sample size of controls,Sample size of PTSD,Analysis,Finding in original study,Marginal probability,Qualitative assessment of the model’s ability to recreate each finding,Overall assessment of the model’s success
+pohlechen2020,35,21,Recall ANOVA Group Main Effect,NS,0.333,Partial Failure,successful recreation
+pohlechen2020,35,21,Recall ANOVA Group x Cue Type Interaction,NS,0.319,Partial Failure,successful recreation
+shvil2014,25,31,Recall ANOVA Group Main Effect,NS,0.951,Successful Recreation,successful recreation
+shvil2014,25,31,Recall ANOVA Cue Type Main Effect,NS,0.184,Failure to Recreate,successful recreation
+shvil2014,25,31,Recall ANOVA Group x Cue Type Interaction,NS,0.934,Successful Recreation,successful recreation
+garfinkel2014,14,14,Recall ANOVA Group x Cue Type Interaction,S,0.06,Failure to Recreate,successful recreation
+garfinkel2014,14,14,Renewal ANOVA Group x Cue Type Interaction,S,0.054,Failure to Recreate,successful recreation
+garfinkel2014,14,14,PTSD t Test Between Stimuli in Recall,S,0.043,Failure to Recreate,successful recreation
+garfinkel2014,14,14,Control t Test Between Stimuli in Renewal,S,0.046,Failure to Recreate,successful recreation
+garfinkel2014,14,14,t Test Between Groups in Renewal,S,0.054,Failure to Recreate,successful recreation
+garfinkel2014,14,14,Control t Test Between Stimuli in Recall,NS,0.939,Successful Recreation,successful recreation
+garfinkel2014,14,14,PTSD t Test Between Stimuli in Renewal,NS,0.948,Successful Recreation,successful recreation
+milad2009,19,20,Recall ANOVA Group x Cue Type Interaction,S,0.067,Failure to Recreate,partial success
+pineles2016,16,16,Group Effect on Regression for Fear Recall,S,0.005,Failure to Recreate,successful recreation
+wicking2016,18,36,Recall ANOVA Group x Cue Type Interaction,S,0.052,Failure to Recreate,successful recreation
+wicking2016,18,36,PTSD t Test Between Stimuli in Recall,S,0.784,Partial Success,successful recreation
+wicking2016,18,36,Control t Test Between Stimuli in Recall,NS,0.448,Chance Level Recreation,successful recreation
