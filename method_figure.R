@@ -1,8 +1,9 @@
 library(ggplot2)
 library(patchwork)
 library(scales)
+library(latentState)
 
-# ---- 1. Run simulations, extracting data only (no base-R plots) ----
+# ---- 1. Run simulations ----
 ctrl_res <- run(phase_def = phase_def, n = 1, eta = eta, lambda = lambda,
                 alpha0 = alpha0, alpha1 = alpha1, alpha2 = alpha2,
                 gamma = gamma, delta = delta, sigma0 = sigma0,
@@ -25,11 +26,6 @@ make_overall_df <- function(res) {
 }
 
 # Raw V within one latent state, for panels C/D/E
-# NOTE: the associative-value trace only starts on the trial AFTER the state
-# is created (e.g. if the state is created on trial 11, the V line begins at
-# trial 12), since V for a not-yet-created state is meaningless. The BELIEF
-# trace, however, is kept for all trials, since belief in a state is
-# well-defined (and typically ~0) even before the state formally exists.
 make_state_df <- function(res, state) {
   cue_names <- names(res$V_raw)
   
